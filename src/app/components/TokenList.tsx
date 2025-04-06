@@ -34,6 +34,12 @@ const TokenList = () => {
 		fetchWalletBalance()
 	}, [])
 
+  if (assets.length === 0) {
+    return (
+      <div className="text-gray-400">No tokens found</div>
+    )
+  }
+
   return (
     <Table>
       <TableHeader>
@@ -46,11 +52,9 @@ const TokenList = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {assets.length === 0 ? (
-          <p className="text-gray-400">No tokens found</p>
-        ) : (
+        {
           assets.map((asset) => (
-            <TableRow>
+            <TableRow key={asset.symbol}>
               <TableCell className="font-medium">{asset.symbol}</TableCell>
               <TableCell>{asset.holdingAmount}</TableCell>
               <TableCell>{asset.averageCost}</TableCell>
@@ -58,7 +62,7 @@ const TokenList = () => {
               <TableCell className="text-right">{parseFloat(asset.pnl.toFixed(6))}</TableCell>
             </TableRow>
           ))
-        )}
+        }
       </TableBody>
     </Table>
   );

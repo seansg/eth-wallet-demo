@@ -42,7 +42,7 @@ const Content = () => {
       <TabsContent value="transactions">
         <Card>
           <CardHeader>
-            <CardTitle>Transaction List</CardTitle>
+            <h3 className="text-lg font-bold">Transactions</h3>
           </CardHeader>
           <CardContent>
             <TransactionList />
