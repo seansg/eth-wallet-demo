@@ -1,35 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import API from "@/app/apis"
 import Nav from "@/app/components/Nav";
+import { WalletProvider } from "@/app/contents/useWalletContext";
 import WalletSelector from '@/app/components/WalletSelector'
+import Content from '@/app/components/Content'
 
 export default function Home() {
-  const [wallets, setWallets] = useState<{ address: string; }[]>([]);
-  const [selectedWallet, setSelectedWallet] = useState(wallets[0]?.address || "");
-
-  const fetchWallets = async () => {
-    API.fetchWallets().then(wallets => setWallets(wallets)).catch(error => {
-      console.error(error)
-    });
-  }
-
-  useEffect(() => {
-    fetchWallets();
-  }, []);
 
   return (
-    <div>
+    <WalletProvider>
       <Nav />
-      <div className="flex justify-center h-screen w-full">
-        <WalletSelector
-          wallets={wallets}
-          fetchWallets={fetchWallets}
-          selectedWallet={selectedWallet}
-          setSelectedWallet={setSelectedWallet}
-        />
+      <div className="flex flex-col px-4">
+        <WalletSelector />
+        <Content />
       </div>
-    </div>
+    </WalletProvider>
   );
 }

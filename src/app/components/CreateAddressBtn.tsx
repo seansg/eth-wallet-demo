@@ -3,15 +3,15 @@ import { Button } from "@/components/ui/button"
 import { PlusCircle } from "lucide-react";
 
 const CreateAddressBtn = ({
-	setSelectedWallet,
+	setWallet,
 	fetchWallets
 }: {
-	setSelectedWallet: (address: string) => void,
+	setWallet: (address: string) => void,
 	fetchWallets: () => void
 }) => {
 	const handleCreateAddress = async () => {
 		const newWallet = await API.createWallet();
-		setSelectedWallet(newWallet.address);
+		setWallet(newWallet.address);
 		await fetchWallets();
 		alert("地址已新增");
 	}

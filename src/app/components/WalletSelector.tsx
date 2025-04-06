@@ -1,32 +1,34 @@
+import { useEffect } from "react";
 import { Clipboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import CreateAddressBtn from "@/app/components/CreateAddressBtn";
+import { useWalletContext } from '@/app/contents/useWalletContext'
+import API from "@/app/apis"
 
-interface WalletSelectorProps {
-  wallets: { address: string }[];
-  fetchWallets: () => void;
-  selectedWallet: string;
-  setSelectedWallet: (address: string) => void;
-}
+const WalletSelector = () => {
+  const { wallets, setWallets, wallet, setWallet } = useWalletContext();
 
-const WalletSelector = ({
-  wallets,
-  fetchWallets,
-  selectedWallet,
-  setSelectedWallet
-}: WalletSelectorProps) => {
+  const fetchWallets = async () => {
+    API.fetchWallets().then(wallets => setWallets(wallets)).catch(error => {
+      console.error(error)
+    });
+  }
 
   const handleCopy = () => {
-    if (selectedWallet) {
-      navigator.clipboard.writeText(selectedWallet);
+    if (wallet) {
+      navigator.clipboard.writeText(wallet);
       alert("地址已複製");
     }
   };
 
+  useEffect(() => {
+    fetchWallets();
+  }, []);
+
   return (
     <div className="flex space-x-2 w-full p-4">
-      <Select onValueChange={setSelectedWallet} defaultValue={selectedWallet}>
+      <Select onValueChange={setWallet} defaultValue={wallet}>
         <SelectTrigger className="flex-1 truncate">
           <SelectValue placeholder="選擇錢包" />
         </SelectTrigger>
@@ -45,7 +47,7 @@ const WalletSelector = ({
 
       <CreateAddressBtn
         fetchWallets={fetchWallets}
-        setSelectedWallet={setSelectedWallet}
+        setWallet={setWallet}
       />
     </div>
   );
