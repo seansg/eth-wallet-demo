@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import API from "@/app/apis"
-import { useWalletContext } from "@/app/contents/useWalletContext";
+import { useWalletContext } from "@/app/contexts/useWalletContext";
 import {
   Table,
   TableBody,

@@ -3,7 +3,7 @@ import { Clipboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import CreateAddressBtn from "@/app/components/CreateAddressBtn";
-import { useWalletContext } from '@/app/contents/useWalletContext'
+import { useWalletContext } from '@/app/contexts/useWalletContext'
 import API from "@/app/apis"
 
 const WalletSelector = () => {

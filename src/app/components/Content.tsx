@@ -1,7 +1,7 @@
 "use client"
 
 import { useContext } from 'react'
-import { WalletContext } from '@/app/contents/useWalletContext'
+import { WalletContext } from '@/app/contexts/useWalletContext'
 import TokenList from "@/app/components/TokenList"
 import TransactionList from "@/app/components/TransactionList"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"

@@ -16,7 +16,7 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   const [wallet, setWallet] = useState<string>("");
 
   return (
-    <WalletContext.Provider
+    <WalletContext
       value={{
         wallets,
         setWallets,
@@ -25,6 +25,6 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
       }}
     >
       {children}
-    </WalletContext.Provider>
+    </WalletContext>
   );
 };
