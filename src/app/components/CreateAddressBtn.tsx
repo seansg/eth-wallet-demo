@@ -1,6 +1,7 @@
 import API from "@/app/apis"
 import { Button } from "@/components/ui/button"
 import { PlusCircle } from "lucide-react";
+import { useCallback } from "react";
 
 const CreateAddressBtn = ({
 	setWallet,
@@ -9,12 +10,12 @@ const CreateAddressBtn = ({
 	setWallet: (address: string) => void,
 	fetchWallets: () => void
 }) => {
-	const handleCreateAddress = async () => {
+	const handleCreateAddress = useCallback(async () => {
 		const newWallet = await API.createWallet();
 		setWallet(newWallet.address);
 		await fetchWallets();
 		alert("地址已新增");
-	}
+	}, [setWallet, fetchWallets]);
 
 	return (
 		<Button onClick={handleCreateAddress}>

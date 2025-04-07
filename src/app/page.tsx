@@ -4,16 +4,20 @@ import Nav from "@/app/components/Nav";
 import { WalletProvider } from "@/app/contexts/useWalletContext";
 import WalletSelector from '@/app/components/WalletSelector'
 import Content from '@/app/components/Content'
+import Buttons from '@/app/components/Buttons'
 
 export default function Home() {
 
   return (
-    <WalletProvider>
+    <>
       <Nav />
-      <div className="flex flex-col px-4">
-        <WalletSelector />
-        <Content />
-      </div>
-    </WalletProvider>
+      <WalletProvider>
+        <div className="flex flex-col">
+          <WalletSelector />
+          <Buttons />
+          <Content />
+        </div>
+      </WalletProvider>
+    </>
   );
 }

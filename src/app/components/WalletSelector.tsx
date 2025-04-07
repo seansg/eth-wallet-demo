@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Clipboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -9,11 +9,11 @@ import API from "@/app/apis"
 const WalletSelector = () => {
   const { wallets, setWallets, wallet, setWallet } = useWalletContext();
 
-  const fetchWallets = async () => {
+  const fetchWallets = useCallback(async () => {
     API.fetchWallets().then(wallets => setWallets(wallets)).catch(error => {
       console.error(error)
     });
-  }
+  }, []);
 
   const handleCopy = () => {
     if (wallet) {

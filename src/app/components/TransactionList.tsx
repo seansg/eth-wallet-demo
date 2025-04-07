@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import API from "@/app/apis"
 import { useWalletContext } from "@/app/contexts/useWalletContext";
 import {
@@ -26,21 +26,21 @@ const TransactionList = () => {
   const { wallet } = useWalletContext();
 	const [histories, setHistories] = useState<HistoryType[]>([]);
 
-	const fetchWalletHistory = async () => {
+	const fetchWalletHistory = useCallback(async () => {
 		API.fetchWalletHistory(wallet).then(walletHistory => {
       setHistories(walletHistory.transactions)
     }).catch(error => {
 			console.error(error)
 		});
-	}
+	}, [wallet]);
 
-  const parseDatetime = (datetime: string) => {
+  const parseDatetime = useCallback((datetime: string) => {
     return new Date(datetime).toLocaleString();
-  }
+  }, []);
 
 	useEffect(() => {
 		fetchWalletHistory()
-	}, [])
+	}, [wallet])
 
   if (histories.length === 0) {
     return (

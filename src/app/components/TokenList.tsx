@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import API from "@/app/apis"
 import { useWalletContext } from "@/app/contexts/useWalletContext";
 import {
@@ -22,17 +22,17 @@ const TokenList = () => {
   const { wallet } = useWalletContext();
 	const [assets, setAssets] = useState<AssetType[]>([]);
 
-	const fetchWalletBalance = async () => {
+	const fetchWalletBalance = useCallback(async () => {
 		API.fetchWalletBalance(wallet).then(walletAsset => {
       setAssets(walletAsset.assets)
     }).catch(error => {
 			console.error(error)
 		});
-	}
+	}, [wallet]);
 
 	useEffect(() => {
 		fetchWalletBalance()
-	}, [])
+	}, [wallet])
 
   if (assets.length === 0) {
     return (
