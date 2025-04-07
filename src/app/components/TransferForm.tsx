@@ -46,7 +46,7 @@ const TransferForm = () => {
   })
 
   const onSubmit = useCallback(async(values: z.infer<typeof formSchema>) => {
-    await API.transfer({
+    await API.sendETH({
       fromAddress: values.fromAddress,
       toAddress: values.toAddress,
       amount: values.amount,
