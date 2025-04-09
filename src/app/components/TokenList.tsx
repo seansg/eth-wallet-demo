@@ -1,70 +1,51 @@
-import { useState, useCallback, useEffect } from "react";
-import API from "@/app/apis"
-import { useWalletContext } from "@/app/contexts/useWalletContext";
+import { useEffect } from 'react';
+import useWalletAssets from "../hooks/useWalletAssets";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-
-interface AssetType {
-  symbol: string;
-  holdingAmount: string,
-  averageCost: number,
-  currentPrice: number,
-  pnl: number
-}
+  Card,
+  CardContent,
+} from "@/components/ui/card"
+import { toCurrency } from "@/app/utils"
 
 const TokenList = () => {
-  const { wallet } = useWalletContext();
-	const [assets, setAssets] = useState<AssetType[]>([]);
+	const { assets, fetchWalletAssets } = useWalletAssets();
 
-	const fetchWalletBalance = useCallback(async () => {
-		API.fetchWalletBalance(wallet).then(walletAsset => {
-      setAssets(walletAsset.assets)
-    }).catch(error => {
-			console.error(error)
-		});
-	}, [wallet]);
-
-	useEffect(() => {
-		fetchWalletBalance()
-	}, [wallet])
+  useEffect(() => {
+    fetchWalletAssets();
+  }, [fetchWalletAssets]);
 
   if (assets.length === 0) {
     return (
-      <div className="text-gray-400">No tokens found</div>
+      <div className="text-gray-400 flex items-center justify-center py-8">No tokens found</div>
     )
   }
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">Token</TableHead>
-          <TableHead>持有數量</TableHead>
-          <TableHead>成本價（平均）</TableHead>
-          <TableHead>現價</TableHead>
-          <TableHead className="text-right">損益</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
+    <Card className="mx-4 py-0 my-4 mb-20">
+      <CardContent className="space-y-2 divide-y divide-gray-200">
         {
           assets.map((asset) => (
-            <TableRow key={asset.symbol}>
-              <TableCell className="font-medium">{asset.symbol}</TableCell>
-              <TableCell>{asset.holdingAmount}</TableCell>
-              <TableCell>{asset.averageCost}</TableCell>
-              <TableCell>{asset.currentPrice}</TableCell>
-              <TableCell className="text-right">{parseFloat(asset.pnl.toFixed(6))}</TableCell>
-            </TableRow>
+            <div key={asset.symbol} className="flex items-center gap-2 py-4">
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <div className="grow">
+                <div className="font-medium">{asset.symbol}</div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">$ {toCurrency(asset.averageCost)}</span>
+                  <span className={`text-sm self-end ${Number(asset.pnl) > 0 ? 'text-green-500' : 'text-red-500'}`}>{Number(asset.pnl).toFixed(2)} %</span>
+                </div>
+              </div>
+              <div className="flex flex-col items-end">
+                <div className="font-medium">{toCurrency(asset.holdingAmount)}</div>
+                <div className="text-sm text-muted-foreground">$ {toCurrency(asset.currentPrice)}</div>
+              </div>
+            </div>
           ))
         }
-      </TableBody>
-    </Table>
+      </CardContent>
+    </Card>
   );
 }
 

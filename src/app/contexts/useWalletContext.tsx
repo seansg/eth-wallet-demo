@@ -1,13 +1,20 @@
+"use client";
+
 import { createContext, useState, useContext } from 'react';
 
-interface WalletContextType {
+type WalletContextType = {
   wallets: { address: string }[];
-  setWallets: React.Dispatch<React.SetStateAction<{ address: string }[]>>;
+  setWallets: (wallets: { address: string }[]) => void;
   wallet: string;
-  setWallet: React.Dispatch<React.SetStateAction<string>>;
+  setWallet: (address: string) => void;
 }
 
-export const WalletContext = createContext<WalletContextType>({} as WalletContextType);
+export const WalletContext = createContext<WalletContextType>({
+  wallets: [],
+  setWallets: () => {},
+  wallet: "",
+  setWallet: () => {}
+});
 
 export const useWalletContext = () => useContext(WalletContext);
 

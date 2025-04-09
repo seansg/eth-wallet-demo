@@ -1,23 +1,25 @@
 "use client";
 
-import Nav from "@/app/components/Nav";
-import { WalletProvider } from "@/app/contexts/useWalletContext";
-import WalletSelector from '@/app/components/WalletSelector'
-import Content from '@/app/components/Content'
 import Buttons from '@/app/components/Buttons'
+import Balance from '@/app/components/Balance'
+import Layout from '@/app/components/Layout'
+import Content from '@/app/components/Content'
+import Footer from '@/app/components/Footer'
+import TokenList from '@/app/components/TokenList';
 
-export default function Home() {
-
+const Home = () => {
   return (
     <>
-      <Nav />
-      <WalletProvider>
-        <div className="flex flex-col">
-          <WalletSelector />
+      <Layout>
+        <Content>
+          <Balance />
           <Buttons />
-          <Content />
-        </div>
-      </WalletProvider>
+          <TokenList />
+          <Footer active="wallet" />
+        </Content>
+      </Layout>
     </>
   );
 }
+
+export default Home

@@ -22,13 +22,13 @@ import {
 } from "@/components/ui/form"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Send } from "lucide-react";
-import { useFormStatus } from 'react-dom';
+import Loading from "./Loading";
 
 const TransferForm = () => {
   const { wallet } = useWalletContext();
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
-  const { pending, data } = useFormStatus();
+  const [loading, setLoading] = useState(false);
 
   const formSchema = z.object({
     fromAddress: z.string().min(2).max(50),
@@ -46,6 +46,9 @@ const TransferForm = () => {
   })
 
   const onSubmit = useCallback(async(values: z.infer<typeof formSchema>) => {
+    if (loading) return;
+
+    setLoading(true);
     await API.sendETH({
       fromAddress: values.fromAddress,
       toAddress: values.toAddress,
@@ -58,8 +61,10 @@ const TransferForm = () => {
       })
       setError(null)
       setOpen(false)
+      setLoading(false);
     }).catch((error) => {
       setError(error.message)
+      setLoading(false);
     })
   }, [wallet])
 
@@ -134,7 +139,13 @@ const TransferForm = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={pending}>Submit</Button>
+            {
+              loading ?
+                <Button variant="outline" className="w-full">
+                  <Loading />
+                </Button> :
+                <Button type="submit" className="w-full" variant="outline" disabled={loading}>Submit</Button>
+            }
           </form>
         </Form>
       </DialogContent>

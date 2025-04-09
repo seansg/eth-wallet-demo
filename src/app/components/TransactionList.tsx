@@ -2,15 +2,11 @@ import { useState, useCallback, useEffect } from "react";
 import API from "@/app/apis"
 import { useWalletContext } from "@/app/contexts/useWalletContext";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import Image from "next/image"
-import LinkSvg from "@/app/images/icons/link.svg"
+  Card,
+  CardContent,
+} from "@/components/ui/card"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { toCurrency } from "@/app/utils"
 
 interface HistoryType {
   id: string;
@@ -38,47 +34,56 @@ const TransactionList = () => {
     return new Date(datetime).toLocaleString();
   }, []);
 
+  const shortAddress = useCallback((fromAddress: string, toAddress: string) => {
+    const method = txMethod(fromAddress, toAddress);
+    const address = method === 'S' ? toAddress : fromAddress;
+    return method ? `${address.slice(0, 4)}...${address.slice(-4)}` : '';
+  }, []);
+
+  const txMethod = useCallback((fromAddress: string, toAddress: string) => {
+    if (fromAddress === wallet) {
+      return 'S';
+    } else if (toAddress === wallet) {
+      return 'R';
+    }
+    return 'T';
+  }, [wallet]);
+
 	useEffect(() => {
 		fetchWalletHistory()
 	}, [wallet])
 
   if (histories.length === 0) {
     return (
-      <div className="text-gray-400">No history found</div>
+      <div className="text-gray-400 flex items-center justify-center py-8">No history found</div>
     )
   }
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="">Datetime</TableHead>
-          <TableHead className="w-[100px]">Token</TableHead>
-          <TableHead>From</TableHead>
-          <TableHead>To</TableHead>
-          <TableHead>Amount</TableHead>
-          <TableHead className="text-right">Explorer</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {
-          histories.map((history) => (
-            <TableRow key={history.id}>
-              <TableCell className="font-medium">{parseDatetime(history.createdAt)}</TableCell>
-              <TableCell className="font-medium">{history.symbol}</TableCell>
-              <TableCell>{history.fromAddress}</TableCell>
-              <TableCell>{history.toAddress}</TableCell>
-              <TableCell>{history.amount}</TableCell>
-              <TableCell className="text-right">
-                <a href={history.explorerUrl} target="_blank" rel="noopener noreferrer">
-                  <Image src={LinkSvg} alt="link" width={24} height={24} />
-                </a>
-              </TableCell>
-            </TableRow>
-          ))
-        }
-      </TableBody>
-    </Table>
+    <div className="mx-4">
+      <h1 className="text-2xl font-bold mb-4">Transaction History</h1>
+      <Card className="py-0 my-4 mb-20">
+        <CardContent className="space-y-2 divide-y divide-gray-200">
+          {
+            histories.map((history) => (
+              <a href={history.explorerUrl} target="_blank" key={history.id} className="flex items-center gap-2 py-4">
+                <div className="flex items-center justify-center rounded-full !w-10 h-10 border border-gray-200">
+                  {txMethod(history.fromAddress, history.toAddress)}
+                </div>
+                <div className="grow">
+                  <div className="font-medium">{txMethod(history.fromAddress, history.toAddress) === 'S' ? 'Send' : txMethod(history.fromAddress, history.toAddress) === 'R' ? 'Receive' : 'Transfer'}</div>
+                  <div className="text-sm text-muted-foreground">{shortAddress(history.fromAddress, history.toAddress)}</div>
+                </div>
+                <div className="flex flex-col items-end">
+                  <div className="font-medium">{toCurrency(history.amount)} {history.symbol}</div>
+                  <div className="text-sm text-muted-foreground">{parseDatetime(history.createdAt)}</div>
+                </div>
+              </a>
+            ))
+          }
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 

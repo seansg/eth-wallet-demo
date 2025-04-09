@@ -1,6 +1,5 @@
 import { useCallback, useEffect } from "react";
-import { Clipboard } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import CreateAddressBtn from "@/app/components/CreateAddressBtn";
 import { useWalletContext } from '@/app/contexts/useWalletContext'
@@ -10,17 +9,13 @@ const WalletSelector = () => {
   const { wallets, setWallets, wallet, setWallet } = useWalletContext();
 
   const fetchWallets = useCallback(async () => {
-    API.fetchWallets().then(wallets => setWallets(wallets)).catch(error => {
+
+    await API.fetchWallets().then(wallets => {
+      setWallets(wallets)
+    }).catch(error => {
       console.error(error)
     });
   }, []);
-
-  const handleCopy = () => {
-    if (wallet) {
-      navigator.clipboard.writeText(wallet);
-      alert("地址已複製");
-    }
-  };
 
   useEffect(() => {
     fetchWallets();
@@ -40,10 +35,6 @@ const WalletSelector = () => {
           ))}
         </SelectContent>
       </Select>
-
-      <Button variant="outline" size="icon" onClick={handleCopy}>
-        <Clipboard className="w-5 h-5" />
-      </Button>
 
       <CreateAddressBtn
         fetchWallets={fetchWallets}
