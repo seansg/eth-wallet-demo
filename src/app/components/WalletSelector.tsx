@@ -15,11 +15,11 @@ const WalletSelector = () => {
     }).catch(error => {
       console.error(error)
     });
-  }, []);
+  }, [setWallets]);
 
   useEffect(() => {
     fetchWallets();
-  }, []);
+  }, [fetchWallets]);
 
   return (
     <div className="flex space-x-2 w-full p-4">

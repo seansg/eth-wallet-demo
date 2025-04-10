@@ -7,7 +7,7 @@ interface FooterProps {
 
 const Footer = ({ active }: FooterProps) => {
   return (
-    <div className="flex items-center justify-around py-4 fixed bottom-0 w-full bg-background/95 divide-x divide-gray-200">
+    <div className="flex md:hidden items-center justify-around py-4 fixed bottom-0 w-full bg-background/95 divide-x divide-gray-200">
       <Link href="/" className={`w-full flex flex-col items-center ${active === 'wallet' ? 'text-blue-500' : 'text-muted-foreground'}`} >
 				<Wallet className="w-6 h-6" />
 				<span className="text-sm">Wallet</span>

@@ -7,7 +7,7 @@ const Balance = () => {
 
 	const totalBalance = useMemo(() => {
 		return assets.reduce((total, asset) => total + (Number(asset.holdingAmount)) * asset.currentPrice, 0);
-	}, [assetsStringify]);
+	}, [assetsStringify, assets]);
 
 	useEffect(() => {
 		fetchWalletAssets();

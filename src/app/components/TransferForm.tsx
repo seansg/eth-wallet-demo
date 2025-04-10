@@ -66,7 +66,7 @@ const TransferForm = () => {
       setError(error.message)
       setLoading(false);
     })
-  }, [wallet])
+  }, [wallet, form])
 
   useEffect(() => {
     form.reset({
@@ -74,7 +74,7 @@ const TransferForm = () => {
       toAddress: "",
       amount: "",
     })
-  }, [wallet])
+  }, [wallet, form])
 
   if (!wallet) {
     return

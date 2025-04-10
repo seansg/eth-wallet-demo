@@ -1,5 +1,6 @@
 import Burger from "@/app/images/icons/burger.svg"
 import Image from "next/image";
+import Link from "next/link";
 
 const Nav = () => {
   return (
@@ -7,9 +8,9 @@ const Nav = () => {
 			<div className="container-wrapper">
 				<div className="container flex h-14 items-center gap-2 md:gap-4">
 
-					<a className="mx-4 flex items-center gap-2 lg:mx-6" href="/">
+					<Link className="mx-4 flex items-center gap-2 lg:mx-6" href="/">
 						<span className="font-bold inline-block">Wallet Demo</span>
-					</a>
+					</Link>
 
 					<div className="ml-auto flex items-center gap-2 md:flex-1 md:justify-end pr-2">
 						<nav className="flex items-center gap-0.5">
