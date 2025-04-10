@@ -2,14 +2,12 @@ import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import TransferForm from "./TransferForm";
 import { Clipboard, RefreshCcw } from "lucide-react";
-import useWalletAssets from "../hooks/useWalletAssets";
 import { useWalletContext } from "@/app/contexts/useWalletContext";
 import Loading from "./Loading";
 import { sleep } from "@/app/utils";
 
 const Buttons = () => {
-	const { wallet } = useWalletContext();
-	const { fetchWalletAssets } = useWalletAssets();
+	const { wallet, fetchWalletAssets } = useWalletContext();
 	const [loading, setLoading] = useState(false);
 
 	const handleCopy = useCallback(() => {

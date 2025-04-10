@@ -23,11 +23,17 @@ const WalletSelector = () => {
 
   return (
     <div className="flex space-x-2 w-full p-4">
-      <Select onValueChange={setWallet} defaultValue={wallet}>
-        <SelectTrigger className="flex-1 truncate">
+      <Select
+        value={wallet}
+        onValueChange={setWallet}
+      >
+        <SelectTrigger className="truncate w-full max-w-[400px]">
           <SelectValue placeholder="選擇錢包" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent
+          position="popper"
+          className="min-w-[--radix-popover-trigger-width]"
+        >
           {wallets.map((wallet, index) => (
             <SelectItem key={index} value={wallet.address}>
               {wallet.address}

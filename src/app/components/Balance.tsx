@@ -1,8 +1,8 @@
 import { useMemo, useEffect } from "react";
-import useWalletAssets from "@/app/hooks/useWalletAssets";
+import { useWalletContext } from "../contexts/useWalletContext";
 
 const Balance = () => {
-	const { assets, fetchWalletAssets } = useWalletAssets();
+	const { assets, fetchWalletAssets } = useWalletContext();
 	const assetsStringify = JSON.stringify(assets);
 
 	const totalBalance = useMemo(() => {

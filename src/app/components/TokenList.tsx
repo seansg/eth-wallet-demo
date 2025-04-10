@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import useWalletAssets from "../hooks/useWalletAssets";
+import { useWalletContext } from "../contexts/useWalletContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Card,
@@ -8,11 +7,7 @@ import {
 import { toCurrency } from "@/app/utils"
 
 const TokenList = () => {
-	const { assets, fetchWalletAssets } = useWalletAssets();
-
-  useEffect(() => {
-    fetchWalletAssets();
-  }, [fetchWalletAssets]);
+	const { assets } = useWalletContext();
 
   if (assets.length === 0) {
     return (
@@ -28,7 +23,7 @@ const TokenList = () => {
             <div className="font-medium md:w-20">Token</div>
             <div className="flex items-center gap-2 md:gap-10">
               <div className="font-medium md:w-20">Avg Cost</div>
-              <div className="font-medium md:w-20">PNL</div>
+              <div className="font-medium md:w-30 self-end">PNL</div>
             </div>
           </div>
           <div className="flex flex-col md:flex-row items-end md:items-center md:gap-10">
@@ -47,7 +42,7 @@ const TokenList = () => {
                 <div className="font-medium md:w-20">{asset.symbol}</div>
                 <div className="flex items-center gap-2 md:gap-10">
                   <span className="text-sm md:text-base text-muted-foreground md:text-black md:w-20">$ {toCurrency(asset.averageCost)}</span>
-                  <span className={`text-sm md:text-base md:w-20 self-end ${Number(asset.pnl) > 0 ? 'text-green-500' : 'text-red-500'}`}>{Number(asset.pnl).toFixed(2)} %</span>
+                  <span className={`text-sm md:text-base md:w-30 self-end ${Number(asset.pnl) > 0 ? 'text-green-500' : 'text-red-500'}`}>{Number(asset.pnl).toFixed(2)} %</span>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row items-end md:items-center md:gap-10">
