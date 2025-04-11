@@ -7,7 +7,7 @@ import Loading from "./Loading";
 import { sleep } from "@/app/utils";
 
 const Buttons = () => {
-	const { wallet, fetchWalletAssets } = useWalletContext();
+	const { wallet, updateWallet } = useWalletContext();
 	const [loading, setLoading] = useState(false);
 
 	const handleCopy = useCallback(() => {
@@ -21,10 +21,10 @@ const Buttons = () => {
 		if (loading) return;
 
 		setLoading(true);
-		await fetchWalletAssets();
+		await updateWallet();
 		await sleep(500);
 		setLoading(false);
-	}, [fetchWalletAssets, loading]);
+	}, [updateWallet, loading]);
 
 	return (
 		<div className="grid grid-cols-3 gap-x-2 px-4">

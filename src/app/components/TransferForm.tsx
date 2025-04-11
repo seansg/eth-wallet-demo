@@ -25,7 +25,7 @@ import { Send } from "lucide-react";
 import Loading from "./Loading";
 
 const TransferForm = () => {
-  const { wallet } = useWalletContext();
+  const { wallet, updateWallet } = useWalletContext();
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -67,7 +67,8 @@ const TransferForm = () => {
       setError(error.message)
       setLoading(false);
     })
-  }, [wallet, form])
+    await updateWallet();
+  }, [wallet, form, updateWallet])
 
   const updateEstimateGas = useCallback(() => {
     if (!wallet) return;

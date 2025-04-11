@@ -1,5 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
-import API from "@/app/apis"
+import { useCallback, useEffect } from "react";
 import { useWalletContext } from "@/app/contexts/useWalletContext";
 import {
   Card,
@@ -9,27 +8,8 @@ import { toCurrency } from "@/app/utils"
 import { Button } from "@/components/ui/button"
 import { SquareArrowOutUpRight } from "lucide-react"
 
-interface HistoryType {
-  id: string;
-  fromAddress: string,
-  toAddress: string,
-  symbol: string,
-  amount: string,
-  explorerUrl: string,
-  createdAt: string
-}
-
 const TransactionList = () => {
-  const { wallet } = useWalletContext();
-	const [histories, setHistories] = useState<HistoryType[]>([]);
-
-	const fetchWalletHistory = useCallback(async () => {
-		API.fetchWalletHistory(wallet).then(walletHistory => {
-      setHistories(walletHistory.transactions)
-    }).catch(error => {
-			console.error(error)
-		});
-	}, [wallet]);
+  const { wallet, histories, fetchWalletHistory } = useWalletContext();
 
   const parseDatetime = useCallback((datetime: string) => {
     return new Date(datetime).toLocaleString();
