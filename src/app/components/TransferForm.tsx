@@ -29,6 +29,7 @@ const TransferForm = () => {
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [gasCost, setGasCost] = useState<number | null>(null);
 
   const formSchema = z.object({
     fromAddress: z.string().min(2).max(50),
@@ -68,13 +69,29 @@ const TransferForm = () => {
     })
   }, [wallet, form])
 
+  const updateEstimateGas = useCallback(() => {
+    if (!wallet) return;
+    if (!form.getValues("toAddress")) return;
+    if (!form.getValues("amount") || Number(form.getValues("amount")) <= 0) return;
+    API.estimateGas({
+      fromAddress: wallet,
+      toAddress: form.getValues("toAddress"),
+      amount: form.getValues("amount"),
+    }).then(({ gasCost }) => {
+      setGasCost(gasCost)
+    }).catch(error => {
+      console.error(error)
+    })
+  }, [form.getValues("toAddress"), form.getValues("amount"), wallet])
+
   useEffect(() => {
     form.reset({
       fromAddress: wallet,
       toAddress: "",
       amount: "",
     })
-  }, [wallet, form])
+    setGasCost(null)
+  }, [wallet, form, open])
 
   if (!wallet) {
     return
@@ -133,18 +150,29 @@ const TransferForm = () => {
                 <FormItem>
                   <FormLabel>Amount</FormLabel>
                   <FormControl>
-                    <Input placeholder="0" type="number" {...field} />
+                    <Input
+                      placeholder="0"
+                      type="number"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        updateEstimateGas();
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            <div className="flex items-center gap-2">
+              <div className="text-sm text-muted-foreground">Estimate Gas: {gasCost || 0}</div>
+            </div>
             {
               loading ?
                 <Button variant="outline" className="w-full">
                   <Loading />
                 </Button> :
-                <Button type="submit" className="w-full" variant="outline" disabled={loading}>Submit</Button>
+                <Button type="submit" className="w-full" variant="outline" disabled={loading || gasCost === null}>Submit</Button>
             }
           </form>
         </Form>
