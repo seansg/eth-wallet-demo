@@ -92,6 +92,7 @@ const TransferForm = () => {
       amount: "",
     })
     setGasCost(null)
+    setError(null)
   }, [wallet, form, open])
 
   if (!wallet) {
